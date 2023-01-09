@@ -73,7 +73,7 @@ public class AccountController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> SendEmail()
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var user = await _context.Users
             .Where(u => u.Id == userId)
             .FirstOrDefaultAsync();
@@ -114,16 +114,14 @@ public class AccountController : ControllerBase
     /// Верифицировать почту
     /// </summary>
     /// <returns></returns>
-    [Authorize(Roles = "Unverified", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("verify")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Verify(string token)
     {
-        var userId = User.Identity!.Name!.Id();
         var verifyToken = await _context.VerifyTokens
-            .Where(t => t.Token == token && t.UserId == userId)
+            .Where(t => t.Token == token)
             .Include(t => t.User)
             .FirstOrDefaultAsync();
         

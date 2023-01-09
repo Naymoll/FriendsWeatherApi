@@ -30,7 +30,7 @@ public class WeatherController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<Weather>> GetFriendsTemperature()
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var friendships = await _context.Friendships.Where(f => f.UserId == userId)
             .Include(f => f.Friend)
             .Include(f => f.FriendMask)

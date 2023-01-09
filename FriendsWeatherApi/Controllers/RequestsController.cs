@@ -28,7 +28,7 @@ public class RequestsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<RequestResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetUserRequests()
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var responses = await _context.FriendshipRequests
             .Where(r => r.ReceiverId == userId)
             .Include(r => r.Sender)
@@ -44,7 +44,7 @@ public class RequestsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetUserRequest(int requestId)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var request = await _context.FriendshipRequests
             .Where(r => r.SenderId == userId && r.Id == requestId)
             .Include(r => r.Sender)
@@ -64,7 +64,7 @@ public class RequestsController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> SendRequest(int otherUserId)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         if (userId == otherUserId) return BadRequest("You can't send request to yourself");
         
         var request = await _context.FriendshipRequests
@@ -88,7 +88,7 @@ public class RequestsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> AcceptRequest(int requestId)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var request = await _context.FriendshipRequests
             .Where(r => r.ReceiverId == userId && r.Id == requestId)
             .FirstOrDefaultAsync();
@@ -119,7 +119,7 @@ public class RequestsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RejectRequest(int requestId)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var request = await _context.FriendshipRequests
             .Where(r => r.ReceiverId == userId && r.Id == requestId)
             .FirstOrDefaultAsync();

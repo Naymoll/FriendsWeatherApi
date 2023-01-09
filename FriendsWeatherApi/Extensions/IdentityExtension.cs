@@ -1,9 +1,11 @@
-﻿namespace FriendsWeatherApi.Extensions;
+﻿using System.Security.Claims;
+
+namespace FriendsWeatherApi.Extensions;
 
 public static class IdentityExtension
 {
-    public static int Id(this string str)
+    public static int Id(this ClaimsPrincipal user)
     {
-        return Convert.ToInt32(str);
+        return Convert.ToInt32(user.Identity!.Name);
     }
 }

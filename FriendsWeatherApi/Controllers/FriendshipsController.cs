@@ -44,7 +44,7 @@ public class FriendshipsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetUserFriends()
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var friendships = await _context.Friendships
             .Where(f => f.UserId == userId)
             .Include(f => f.Friend)
@@ -61,7 +61,7 @@ public class FriendshipsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetUserFriend(int friendId)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var friendship = await _context.Friendships
             .Where(f => f.UserId == userId && f.FriendId == friendId)
             .Include(f => f.Friend)
@@ -83,7 +83,7 @@ public class FriendshipsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> MaskUserFriend(int friendId, MaskFriendRequest request)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var friendship = await _context.Friendships
             .Where(f => f.UserId == userId && f.FriendId == friendId)
             .Include(f => f.FriendMask)
@@ -119,7 +119,7 @@ public class FriendshipsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveFriend(int friendId)
     {
-        var userId = User.Identity!.Name!.Id();
+        var userId = User.Id();
         var friendship = await _context.Friendships
             .Where(f => f.UserId == userId && f.FriendId == friendId)
             .FirstOrDefaultAsync();
